@@ -55,4 +55,34 @@ if __name__ =="__main__" :
                                                                         ])
                                         ,should_invert=False)
 
+  ## Model , Loss and Optimizer Initialization
+  model = SiameseNetwork().to(device)
+  criterion = CustomCrossEntropyLoss().to(device)
+  optimizer = optim.Adam(model.parameters(), lr = learning_rate)
+
+  ## Training Loop
+  train_loss_list = []
+  test_loss_list = []
+  train_accuracy_list = []
+  test_accuracy_list = []
+
+  for current_epoch in range(0, EPOCHS):
+      print("Epoch number: ", current_epoch)
+      start_time = time()
+      
+      print("\nTraining:")
+      train_loss, train_accuracy = train_model(model, device, train_dataloader, current_epoch, optimizer, criterion)
+      
+      print("\nTesting:")
+      test_loss, test_accuracy = evaluate_model(model, device, test_dataloader, criterion)
+      
+      train_loss_list.append((current_epoch, train_loss))
+      test_loss_list.append((current_epoch, test_loss))
+      train_accuracy_list.append((current_epoch, train_accuracy))
+      test_accuracy_list.append((current_epoch, test_accuracy))
+      
+      torch.save(model.state_dict(), 'siamese_net_crossEntropy.pt')
+      end_time = time()
+      print("Time taken for running epoch {} is {:.3f} seconds.\n\n".format(current_epoch, end_time-start_time))
+
   test_dataloader = DataLoader(test_dataset, batch_size=256, shuffle=False)
