@@ -54,6 +54,8 @@ if __name__ =="__main__" :
                                                                         transforms.ToTensor()
                                                                         ])
                                         ,should_invert=False)
+  
+  test_dataloader = DataLoader(test_dataset, batch_size=256, shuffle=False)
 
   ## Model , Loss and Optimizer Initialization
   model = SiameseNetwork().to(device)
@@ -85,4 +87,3 @@ if __name__ =="__main__" :
       end_time = time()
       print("Time taken for running epoch {} is {:.3f} seconds.\n\n".format(current_epoch, end_time-start_time))
 
-  test_dataloader = DataLoader(test_dataset, batch_size=256, shuffle=False)
